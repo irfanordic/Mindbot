@@ -1,8 +1,8 @@
-from pydantic import Basemodel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field
 from datetime import datetime
 from uuid import UUID
 
-class TenantBase(Basemodel):
+class TenantBase(BaseModel):
     name: str = Field(description = "Name of the tenant")
     email: EmailStr = Field(description = "Email address of the tenant")
     

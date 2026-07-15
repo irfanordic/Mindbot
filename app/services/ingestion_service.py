@@ -1,22 +1,21 @@
-from text_processor import TextProcessor
-from embeddings_service import EmbeddingsService
-from sqlalchemy.orm import session
+from app.services.text_processor import TextProcessor
+from app.services.embeddings_service import EmbeddingsService
+from sqlalchemy.orm import Session
 from app.models.document import Document
 from app.models.document_chunk import DocumentChunk
 
 
-from requests import session
 
 
 class IngestionService:
-    def __init__(self,db: session):
+    def __init__(self,db: Session):
         
         self.db = db
         self.processor = TextProcessor()
         self.embeddings_service = EmbeddingsService()
         
         
-    def ingest_text(self, document_id: str) -> bool:
+    async def ingest_text(self, document_id: str) -> bool:
         
         
         
@@ -33,7 +32,7 @@ class IngestionService:
             
             for index,chunks_text in enumerate(chunks):
                 
-                vector = self.embeddings_service.get_embeddings(chunks_text)
+                vector = await self.embeddings_service.get_embeddings(chunks_text)
                 
                 chunk = DocumentChunk(
                     document_id = doc.id,

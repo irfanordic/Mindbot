@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from app.core.database import sessionLocal, get_db
+from app.core.database import get_db
 from app.schemas.documents import DocumentCreate, DocumentResponse
 from app.models.document import Document
 from app.workers.tasks import process_document_task
@@ -9,7 +9,7 @@ import asyncio
 
 router = APIRouter()
 
-router.post("/", response_model=DocumentResponse, status_code=status.HTTP_200_OK)
+@router.post("/", response_model=DocumentResponse, status_code=status.HTTP_200_OK)
 def upload_document(doc_in: DocumentCreate, db: Session = Depends(get_db)):
     
     new_doc=Document(

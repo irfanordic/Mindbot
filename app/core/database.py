@@ -4,9 +4,12 @@ from sqlalchemy.ext.declarative import declarative_base
 import os
 from dotenv import load_dotenv
 
-load_dotenv(dotenv_path="../.env")
+load_dotenv()
 
 DATABASE_URL = os.getenv("DB_LINK")
+
+if not DATABASE_URL:
+    raise ValueError("DB_LINK environment variable is not set. Check your .env file!")
 
 engine = create_engine(DATABASE_URL)
 sessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine )

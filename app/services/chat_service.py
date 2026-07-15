@@ -1,5 +1,5 @@
 from openai import AsyncOpenAI
-from retrieval_service import RetrievalService
+from app.services.retrieval_service import RetrievalService
 from sqlalchemy.orm import Session
 import os
 
@@ -7,8 +7,8 @@ class ChatService():
     
     def __init__(self, db: Session):
         
-        self.client = AsyncOpenAI(os.getenv("OPEN_AI_API"))
-        self.retrieval_service = RetrievalService()
+        self.client = AsyncOpenAI(api_key= os.getenv("OPENAI_API_KEY"))
+        self.retrieval_service = RetrievalService(db=db)
         
     async def answer_question(self, tenant_id: str, question: str):
         

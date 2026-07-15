@@ -1,9 +1,9 @@
-from pydantic import Basemodel, Field
+from pydantic import BaseModel, Field
 from datetime import datetime
 from uuid import UUID
 
 
-class DocumentBase(Basemodel):
+class DocumentBase(BaseModel):
     filename: str = Field(description="Name of the document")
     filetype: str = Field(description="Type of the document")
     

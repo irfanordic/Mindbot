@@ -4,7 +4,7 @@ from app.models.document_chunk import DocumentChunk
 
 class RetrievalService():
     def __init__(self, db: Session):
-        self.db = db,
+        self.db = db
         self.embedding_service = EmbeddingsService()
         
     def retrival_service(self, tenant_id: str,user_query: str, limit: int=4) -> list[str]:
