@@ -1,4 +1,4 @@
-from openai import AsyncOpenAI
+from google import genai
 from dotenv import load_dotenv
 import os
 
@@ -8,16 +8,17 @@ load_dotenv()
 
 class EmbeddingsService:
     def __init__(self):
-        self.model = "text-embedding-3-small"
-        self.client = AsyncOpenAI(api_key=os.getenv("OPEN_AI_API_KEY"))
+        self.model = "gemini-embedding-001"
+        self.client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
         
     async def get_embeddings(self, text:str) -> list[float]:
         
-        response =  await self.client.embeddings.create(
+        response =  await self.client.aio.models.embed_content(
             model=self.model,
-            input=text
+            contents=text,
+            config={"output_dimensionality": 768}
         )   
         
-        return response.data[0].embedding
+        return response.embeddings[0].values
         
 

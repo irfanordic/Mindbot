@@ -14,7 +14,7 @@ class TenantCreate(TenantBase):
 
 class TenantResponse(TenantBase):
     id: UUID = Field(description = "Unique identifier for the tenant")
-    created: datetime
+    created_at: datetime
     api_key: str = Field(description = "API key for the tenant")
     is_active: bool = Field(description = "Indicates if the tenant is active")
     class Config:

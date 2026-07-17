@@ -14,7 +14,7 @@ class DocumentChunk(Base):
     chunk_index = Column(Integer, nullable=False)
     page_number = Column(Integer, nullable=True)
     content     = Column(String, nullable=False)
-    embedding   = Column(Vector(1536), nullable=False)
+    embedding   = Column(Vector(768), nullable=False)
     tenant_id   = Column(UUID(as_uuid=True), ForeignKey("tenants.id"), nullable=False, index=True)
     
     

@@ -14,7 +14,7 @@ class DocumentCreate(DocumentBase):
    
 class DocumentResponse(DocumentBase):
     id: UUID = Field(description="Unique identifier for the document")
-    created: datetime
+    created_at: datetime
     tenant_id: UUID = Field(description="Unique identifier for the tenant associated with the document")
     status: str = Field(description="Status of the document")
     class Config:

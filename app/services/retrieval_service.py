@@ -7,8 +7,8 @@ class RetrievalService():
         self.db = db
         self.embedding_service = EmbeddingsService()
         
-    def retrival_service(self, tenant_id: str,user_query: str, limit: int=4) -> list[str]:
-        query_vector = self.embedding_service.get_embeddings(user_query)
+    async def retrival_service(self, tenant_id: str,user_query: str, limit: int=4) -> list[str]:
+        query_vector =await self.embedding_service.get_embeddings(user_query)
         
         results = (
             self.db.query(DocumentChunk)

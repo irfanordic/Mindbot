@@ -25,7 +25,7 @@ class IngestionService:
             return False
         
         try:
-            raw_text = "This is the internal company policy text..."
+            raw_text = "Klartext Enterprise Policy: Employees are allowed to work remotely up to 3 days a week. Core collaboration hours are between 10 AM and 3 PM EST. All expense reports must be submitted by the last Friday of each month."
             
             
             chunks  = self.processor.split_text(raw_text)
@@ -45,14 +45,14 @@ class IngestionService:
                 )
                 
                 self.db.add(chunk)
-                doc.status = "PROCESSED"
-                self.db.commit()
-                return True
+                
+            doc.status = "PROCESSED"
+            self.db.commit()
+            return True
             
         except Exception as e:
             print(f"Error during ingestion: {e}")
             self.db.rollback()
-            self.db.commit()
             raise e
             
                 

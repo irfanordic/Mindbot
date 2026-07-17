@@ -4,6 +4,7 @@ from app.core.database import get_db
 from app.schemas.documents import DocumentCreate, DocumentResponse
 from app.models.document import Document
 from app.workers.tasks import process_document_task
+from app.services.ingestion_service import IngestionService
 import asyncio
 
 
@@ -29,8 +30,3 @@ def upload_document(doc_in: DocumentCreate, db: Session = Depends(get_db)):
     
     return new_doc
     
-    
-    
-
-
-
