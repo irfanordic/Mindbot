@@ -2,6 +2,9 @@ import asyncio
 from app.services.ingestion_service import IngestionService
 from app.core.database import sessionLocal
 from app.core.celery_app import celery_app
+from app.models.tenant import Tenant
+from app.models.document import Document
+from app.models.document_chunk import DocumentChunk
 
 
 

@@ -1,7 +1,8 @@
 from pydantic import BaseModel, Field
 
+
 class ChatRequest(BaseModel):
-    tenant_id: str = Field(...,description="the company tennat identification header" )
+    
     question: str = Field(...,min_length=1, description="the user question")
     model_config = {
         "json_schema_extra": {

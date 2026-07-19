@@ -3,6 +3,7 @@ from app.services.embeddings_service import EmbeddingsService
 from sqlalchemy.orm import Session
 from app.models.document import Document
 from app.models.document_chunk import DocumentChunk
+from pypdf import PdfReader
 
 
 
@@ -25,10 +26,21 @@ class IngestionService:
             return False
         
         try:
-            raw_text = "Klartext Enterprise Policy: Employees are allowed to work remotely up to 3 days a week. Core collaboration hours are between 10 AM and 3 PM EST. All expense reports must be submitted by the last Friday of each month."
+            
+            filepath = doc.file_url
+            reader = PdfReader(filepath)
+            extracted_text = ""
+            for page in reader.pages:
+                text = page.extract_text()
+                if text:
+                    extracted_text += text + "\n"
+                
             
             
-            chunks  = self.processor.split_text(raw_text)
+            
+            
+            
+            chunks  = self.processor.split_text(extracted_text)
             
             for index,chunks_text in enumerate(chunks):
                 

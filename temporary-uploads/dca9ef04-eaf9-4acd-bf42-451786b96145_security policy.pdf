@@ -1,0 +1,45 @@
+========================================================================
+                     KLARTEXT CYBERSECURITY AND DATA POLICY
+========================================================================
+Document ID: SEC-2026-V1
+Effective Date: July 18, 2026
+Classification: Internal Corporate Standard
+
+SECTION 1: PASSWORD AND AUTHENTICATION MANAGEMENT
+All employees, contractors, and third-party vendors accessing the internal 
+network must utilize Multi-Factor Authentication (MFA) at all times. 
+
+Password complexity requirements are strictly enforced as follows:
+1. Minimum length of 16 characters.
+2. Must contain at least one uppercase letter, one lowercase letter, one 
+   numerical digit, and two special characters (e.g., !, @, #, $, %).
+3. Passwords must be rotated every 90 days. 
+4. Re-use of any of the last 5 historical passwords is strictly prohibited.
+
+Account Lockout Threshold:
+If a user inputs an incorrect password 5 consecutive times, the account will 
+be automatically locked for a duration of 30 minutes. To unlock an account 
+prior to this window expiring, the employee must contact the IT Helpdesk 
+directly via secure voice verification.
+
+-------------------- PAGE BREAK / PAGE 2 --------------------
+
+SECTION 2: DATA RETENTION, DISPOSAL, AND HARDWARE ACCUMULATION
+Corporate data storage is divided into tiers based on sensitivity. 
+
+1. Customer Personal Identifiable Information (PII): Must be encrypted 
+   both at rest and in transit using AES-256 standards. PII data cannot be 
+   stored on local machine drives under any circumstances.
+2. Financial Records: Retained for a mandatory period of 7 years to comply 
+   with regulatory tax audits, after which it must be scrubzed using certified 
+   digital shredding tools.
+
+SECTION 3: CLEAN DESK POLICY AND PHYSICAL SECURITY
+Employees working within the corporate office space are required to lock 
+their computer workstations (Windows Key + L or Command + Control + Q) 
+any time they step away from their desks, even if only for a brief moment. 
+
+No sensitive documents containing customer data, API access credentials, or 
+source code structures may be left printed out on desks overnight. All physical 
+papers must be deposited into the designated locked shredding bins located near 
+the primary elevator bay.
