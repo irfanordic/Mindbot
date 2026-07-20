@@ -5,30 +5,27 @@ from app.schemas.chat import ChatResponse, ChatRequest, MessageFeedbackRequest
 from app.services.chat_service import ChatService
 from app.core.security import get_current_tenant
 from app.models.tenant import Tenant, Message
-
+from fastapi.responses import StreamingResponse
 
 
 router = APIRouter()
 
 
-@router.post("/", response_model=ChatResponse, status_code=status.HTTP_200_OK)
+@router.post("/",  status_code=status.HTTP_200_OK)
 async def handle_chat(payload: ChatRequest, db: Session=Depends(get_db), current_tenant: Tenant=Depends(get_current_tenant)):
     
     chat_service = ChatService(db=db)
     
-    try:
-        ai_response  =  await chat_service.answer_question(current_tenant.id,payload.conversation_id, payload.question)
-        
-        return ChatResponse(
-            answer=ai_response["answer"],
-            source=ai_response["source"]
-        )
-        
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail={f"AI response failed: {str(e)} "}
-        )    
+    return StreamingResponse(
+        chat_service.answer_question_stream(
+            current_tenant.id,
+            payload.conversation_id,
+            payload.question
+        ),
+        media_type="text/event-stream"
+    )
+    
+   
         
 @router.post("/feedback", status_code=status.HTTP_200_OK)
 async def submit_feedback(

@@ -5,6 +5,7 @@ from app.models.document_chunk import DocumentChunk
 from app.models.tenant import Tenant, Conversation, Message
 from google.genai import types
 import os
+import json
 
 class ChatService():
     
@@ -14,7 +15,7 @@ class ChatService():
         self.retrieval_service = RetrievalService(db=db)
         self.db = db
         
-    async def answer_question(self, tenant_id: str, conversation_id:str, question: str):
+    async def answer_question_stream(self, tenant_id: str, conversation_id:str, question: str):
         
         if not conversation_id:
             db_convo = Conversation(tenant_id=tenant_id)
@@ -63,10 +64,10 @@ class ChatService():
             self.db.add(assist_msg)
             self.db.commit()
             
-            return{
-                "answer": fallback_answer,
-                "source": []
-            }
+            yield  f"data: {json.dumps({'answer': fallback_answer, 'source': []})}\n\n"
+            return  
+            
+            
             
         context_chunks = [item.DocumentChunk.content for item in raw_results]
         context_text = "\n---\n".join(context_chunks)
@@ -78,6 +79,9 @@ class ChatService():
                 "distance": round(float(item.distance), 4)
             } for item in raw_results
         ]
+        
+        
+        yield f"data: {json.dumps({'source': source_payload})}\n\n"
         
         content_payload = []
         for msg in history_messages:
@@ -92,28 +96,43 @@ class ChatService():
             types.Content(role="user", parts=[types.Part.from_text(text=current_prompt)])
         )
         
-        response =   await self.client.aio.models.generate_content(
+        response_stream =   await self.client.aio.models.generate_content_stream(
             model="gemini-3.1-flash-lite",
             contents=content_payload
             
         )
         
-        if response.usage_metadata:
-            token_used = response.usage_metadata.total_token_count
+        full_response_text = ""
+        
+        
+        
+        
+        async for chunk in response_stream:
+            last_chunk = chunk
+            if chunk.text:
+                full_response_text += chunk.text
+                yield f"data: {chunk.text}\n\n"
+                
+               
+        if last_chunk and  last_chunk.usage_metadata:
+            token_used = last_chunk.usage_metadata.total_token_count
             tenant = self.db.query(Tenant).filter(Tenant.id==tenant_id).first()
             if tenant:
                 tenant.token_used += token_used
-                self.db.commit()
+                self.db.commit()     
+        
+        
+        
+        
+        
+        
             
             
-        assist_msg = Message(role="assistant", conversation_id=conversation_id, content=response.text)    
+        assist_msg = Message(role="assistant", conversation_id=conversation_id, content=full_response_text)    
         self.db.add(assist_msg)
         self.db.commit()    
         
         
         
-        return { 
-                "answer": response.text,
-                "source": source_payload
-                }
+        yield "data: [DONE]\n\n"
         
